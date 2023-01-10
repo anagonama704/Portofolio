@@ -42,6 +42,18 @@ const Main = () => {
 
     console.log(post);
 
+    // const [state, setState] = useState();
+    // useEffect(() => {
+    //     // useEffect自体ではasyncの関数を受け取れないので内部で関数を定義して呼び出す。
+    //     const access_db = async () => {
+    //         const response = await fetch("http://localhost:8000/api/posts");
+    //         const body = await response.json();
+    //         setState(body); // stateに反映する
+    //     };
+    //     access_db();
+    // }, []);
+    // console.log(state);
+
     return (
         <div className="main">
             <p>{main}</p>
@@ -65,6 +77,16 @@ const Main = () => {
                     ))}
                 </tbody>
             </table>
+            <div className="inp">
+                <form action="create" method="get">
+                    <input type="text" name="names" />
+                    <input type="submit" value="追加" />
+                </form>
+                <form action="delete" method="get">
+                    <input type="text" name="ids" />
+                    <input type="submit" value="削除" />
+                </form>
+            </div>
         </div>
     );
 };

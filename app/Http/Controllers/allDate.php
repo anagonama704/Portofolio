@@ -12,4 +12,16 @@ class allDate extends Controller
         $ddtt = DB::table('tests')->get();
         return response()->json($ddtt);
     }
+    public function create(Request $request)
+    {
+        DB::table('tests')->insert(['name' => $_POST['names']]);
+
+        return redirect('http://localhost:8000/portfolio', 301);
+    }
+    public function delete(Request $request)
+    {
+        DB::table('tests')->delete(['id' => $_POST['ids']]);
+
+        return redirect('http://localhost:8000/portfolio', 301);
+    }
 }
