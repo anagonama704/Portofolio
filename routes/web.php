@@ -14,9 +14,9 @@ use Illuminate\Support\Facades\Route;
 |
 */
 
-Route::get('/{any}', function () {
+Route::get('/portfolio{any}', function () {
   return view('welcome');
 })->where('any', '.*');
 
-Route::get('/create', [allDate::class, 'create']);
-Route::get('/delete', [allDate::class, 'delete']);
+Route::post('/create', [allDate::class, 'create']);
+Route::post('/delete', [allDate::class, 'delete']);

@@ -18,6 +18,11 @@ const Nav = () => {
                     </Link>
                 </li>
                 <li>
+                    <Link component={Links} to="/portfolio/work">
+                        Work
+                    </Link>
+                </li>
+                <li>
                     <Link component={Links} to="/portfolio/about">
                         About
                     </Link>

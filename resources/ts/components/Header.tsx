@@ -15,7 +15,7 @@ import AdbIcon from "@mui/icons-material/Adb";
 
 import "../../css/header.css";
 
-const pages = ["Top", "About", "Contact"];
+const pages = ["Top", "Work", "About", "Contact"];
 const settings = ["Profile", "Account", "Dashboard", "Logout"];
 
 const Header = () => {
@@ -45,9 +45,6 @@ const Header = () => {
         <AppBar position="static" style={{ backgroundColor: "#bbb" }}>
             <Container maxWidth="xl">
                 <Toolbar disableGutters>
-                    <AdbIcon
-                        sx={{ display: { xs: "none", md: "flex" }, mr: 1 }}
-                    />
                     <Typography
                         variant="h6"
                         noWrap
@@ -112,9 +109,7 @@ const Header = () => {
                             ))}
                         </Menu>
                     </Box>
-                    <AdbIcon
-                        sx={{ display: { xs: "flex", md: "none" }, mr: 1 }}
-                    />
+
                     <Typography
                         variant="h5"
                         noWrap
