@@ -8,7 +8,6 @@ const Main = () => {
     const track = document.head.querySelector(
         'meta[name="csrf-token"][content]'
     ) as HTMLMetaElement;
-    console.log(track.content);
 
     useEffect(() => {
         getData();
@@ -27,6 +26,8 @@ const Main = () => {
     };
 
     console.log(post);
+
+    console.log(post[8]);
 
     return (
         <div className="main">

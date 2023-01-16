@@ -12,6 +12,11 @@ class allDate extends Controller
         $ddtt = DB::table('tests')->get();
         return response()->json($ddtt);
     }
+    public function work(Request $request)
+    {
+        $works = DB::table('works')->get();
+        return response()->json($works);
+    }
     public function create(Request $request)
     {
         DB::table('tests')->insert(['name' => $_POST['names']]);

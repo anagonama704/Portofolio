@@ -12,8 +12,10 @@ import Button from "@mui/material/Button";
 import Tooltip from "@mui/material/Tooltip";
 import MenuItem from "@mui/material/MenuItem";
 import AdbIcon from "@mui/icons-material/Adb";
+import { Link } from "react-router-dom";
 
 import "../../css/header.css";
+import { color } from "@mui/system";
 
 const pages = ["Top", "Work", "About", "Contact"];
 const settings = ["Profile", "Account", "Dashboard", "Logout"];
@@ -42,12 +44,15 @@ const Header = () => {
     };
 
     return (
-        <AppBar position="static" style={{ backgroundColor: "#bbb" }}>
+        <AppBar
+            position="static"
+            style={{ backgroundColor: "#bbb" }}
+            id="header"
+        >
             <Container maxWidth="xl">
                 <Toolbar disableGutters>
                     <Typography
                         variant="h6"
-                        noWrap
                         component="a"
                         href="/portfolio"
                         sx={{
@@ -58,9 +63,11 @@ const Header = () => {
                             letterSpacing: ".3rem",
                             color: "inherit",
                             textDecoration: "none",
+                            overflow: "none",
                         }}
+                        id="logos"
                     >
-                        LOGO
+                        <img src="/images/logo.png" alt="" id="logo" />
                     </Typography>
 
                     <Box
@@ -102,7 +109,15 @@ const Header = () => {
                                     key={page}
                                     onClick={handleCloseNavMenu}
                                 >
-                                    <Typography textAlign="center">
+                                    <Typography
+                                        textAlign="center"
+                                        component={Link}
+                                        to={"/portfolio/" + page}
+                                        style={{
+                                            textDecoration: "none",
+                                            color: "#000",
+                                        }}
+                                    >
                                         {page}
                                     </Typography>
                                 </MenuItem>
@@ -126,7 +141,7 @@ const Header = () => {
                             textDecoration: "none",
                         }}
                     >
-                        LOGO
+                        <img src="/images/logo.png" alt="" id="logo" />
                     </Typography>
                     <Box
                         sx={{
