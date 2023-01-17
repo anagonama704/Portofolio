@@ -1,0 +1,44 @@
+#work {
+    width: 100%;
+    height: auto;
+    padding: 50px 0;
+    background-color: #eee;
+}
+#work h2 {
+    text-align: center;
+    font-size: 35px;
+    margin: 0 0 50px 0;
+}
+#work_cmp {
+    width: 70%;
+    height: auto;
+    padding: 50px 0;
+    margin: 0 auto 50px auto;
+    display: flex;
+    justify-content: space-around;
+    align-items: center;
+}
+#img_cmp {
+    width: 500px;
+    height: 300px;
+    background-color: rgb(211, 231, 231);
+}
+.work_img {
+    width: 85%;
+    height: 85%;
+    background-size: cover;
+    margin: 5% auto;
+}
+.work_p {
+    width: 40%;
+    height: fit-content;
+    padding: 0 0 20px 0;
+}
+@media (max-width: 767px) {
+    #work_cmp {
+        display: block;
+    }
+    .work_p {
+        width: auto;
+    }
+}

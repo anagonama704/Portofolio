@@ -9,7 +9,13 @@ import { Top } from "./components/Top";
 import { Works } from "./components/Work";
 import { About } from "./components/About";
 import { Contact } from "./components/Contact";
-import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
+import {
+    BrowserRouter as Router,
+    Routes,
+    Route,
+    useLocation,
+} from "react-router-dom";
+import SlideRoutes from "react-slide-routes";
 import { Footer } from "./components/Footer";
 
 import "../css/app.css";

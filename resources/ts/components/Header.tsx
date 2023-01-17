@@ -15,7 +15,6 @@ import AdbIcon from "@mui/icons-material/Adb";
 import { Link } from "react-router-dom";
 
 import "../../css/header.css";
-import { color } from "@mui/system";
 
 const pages = ["Top", "Work", "About", "Contact"];
 const settings = ["Profile", "Account", "Dashboard", "Logout"];
@@ -141,7 +140,7 @@ const Header = () => {
                             textDecoration: "none",
                         }}
                     >
-                        <img src="/images/logo.png" alt="" id="logo" />
+                        <img src="/images/logos.png" alt="" id="logo" />
                     </Typography>
                     <Box
                         sx={{

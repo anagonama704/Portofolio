@@ -17,6 +17,11 @@ class allDate extends Controller
         $works = DB::table('works')->get();
         return response()->json($works);
     }
+    public function info_wk(Request $request)
+    {
+        $info_wks = DB::table('works')->leftJoin('work_infos', 'works.id', '=', 'work_infos.w_id')->get();
+        return response()->json($info_wks);
+    }
     public function create(Request $request)
     {
         DB::table('tests')->insert(['name' => $_POST['names']]);
