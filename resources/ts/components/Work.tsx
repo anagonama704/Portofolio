@@ -2,7 +2,6 @@ import React, { useEffect } from "react";
 import { Card } from "@mui/material";
 import axios from "axios";
 import "../../css/work.css";
-import { Padding } from "@mui/icons-material";
 
 const Works = () => {
     type postman = {
