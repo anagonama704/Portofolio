@@ -5,7 +5,18 @@
     background-color: #eee;
 }
 #co_card {
-    width: 80%;
+    width: 60%;
     height: auto;
-    padding: 50px 0;
+    padding: 50px 0 50px 0;
+    margin: 0 auto;
+}
+
+.forms {
+    display: block;
+    width: fit-content;
+    height: auto;
+    margin: 0 auto;
+}
+.u_name {
+    width: 500px;
 }
