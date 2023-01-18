@@ -3,7 +3,7 @@ import "../../css/footer.css";
 
 const Footer = () => {
     const footer: string = "フッター";
-    const copy: string = "2022" + String.fromCharCode(169) + "watanabe kei";
+    const copy: string = "2022 " + String.fromCharCode(169) + " watanabe kei";
 
     return (
         <div id="footer">
