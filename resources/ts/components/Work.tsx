@@ -45,7 +45,8 @@ const Works = () => {
                         id="work_cmp"
                         key={index}
                         component="a"
-                        href={postt.link}
+                        href={"https://anagonama704.github.io/" + postt.link}
+                        target="_blank"
                         style={{ textDecoration: "none" }}
                     >
                         <Card id="img_cmp">
