@@ -21,4 +21,5 @@ Route::group(['middleware' => 'api'], function () {
     Route::get('/posts', 'App\Http\Controllers\allDate@index');
     Route::get('/works', 'App\Http\Controllers\allDate@work');
     Route::get('/info_wk', 'App\Http\Controllers\allDate@info_wk');
+    Route::post('/mails', 'App\Http\Controllers\MailController@send');
 });
