@@ -1,7 +1,11 @@
 import React, { useEffect } from "react";
 import { Card } from "@mui/material";
+import Slider from "react-slick";
 import axios from "axios";
+import "slick-carousel/slick/slick.css";
+import "slick-carousel/slick/slick-theme.css";
 import "../../css/work.css";
+import { style, width } from "@mui/system";
 
 const Works = () => {
     type postman = {
@@ -39,41 +43,60 @@ const Works = () => {
     return (
         <div id="work">
             <h2>Work</h2>
-            {post.map((postt, index) => {
-                return (
-                    <Card
-                        id="work_cmp"
-                        key={index}
-                        component="a"
-                        href={"https://anagonama704.github.io/" + postt.link}
-                        target="_blank"
-                        style={{ textDecoration: "none" }}
-                    >
-                        <Card id="img_cmp">
-                            <div
-                                style={{
-                                    backgroundImage: `url(/images/${postt.path})`,
-                                }}
-                                className="work_img"
-                            ></div>
-                        </Card>
-                        <div className="work_p">
-                            <h3>{postt.name}</h3>
-                            <p>{postt.award}</p>
-                            <p>{postt.infos}</p>
-                            <div
-                                style={{
-                                    display: "flex",
-                                    padding: "10px 0 0 0",
-                                }}
+
+            <Slider
+                dots
+                infinite
+                lazyLoad="ondemand"
+                slidesToShow={1}
+                slidesToScroll={1}
+                className="slides"
+                autoplay
+                autoplaySpeed={2000}
+                centerMode
+            >
+                {post.map((postt, index) => {
+                    return (
+                        <div className="slide_cmp">
+                            <Card
+                                id={"" + postt.id}
+                                className="work_cmp"
+                                key={index}
+                                component="a"
+                                href={
+                                    "https://anagonama704.github.io/" +
+                                    postt.link
+                                }
+                                target="_blank"
+                                style={{ textDecoration: "none" }}
                             >
-                                <p>制作期間：</p>
-                                <p>{postt.creation_time}</p>
-                            </div>
+                                <Card id="img_cmp">
+                                    <div
+                                        style={{
+                                            backgroundImage: `url(/images/${postt.path})`,
+                                        }}
+                                        className="work_img"
+                                    ></div>
+                                </Card>
+                                <div className="work_p">
+                                    <h3>{postt.name}</h3>
+                                    <p>{postt.award}</p>
+                                    <p>{postt.infos}</p>
+                                    <div
+                                        style={{
+                                            display: "flex",
+                                            padding: "10px 0 0 0",
+                                        }}
+                                    >
+                                        <p>制作期間：</p>
+                                        <p>{postt.creation_time}</p>
+                                    </div>
+                                </div>
+                            </Card>
                         </div>
-                    </Card>
-                );
-            })}
+                    );
+                })}
+            </Slider>
         </div>
     );
 };
