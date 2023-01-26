@@ -11,12 +11,13 @@ class MailController extends Controller
     {
         //$info = $_POST['content'];
         $info = $request->all();
+
         Mail::raw($info['content'], function ($data) use ($info) {
             $data
                 ->to('namazu26520@gmail.com')
-                ->subject($info['username'] . 'さんからお問い合わせ');
+                ->subject($info['username'] . "（" . $info['mails'] . "）" . '様からお問い合わせ');
         });
 
-        return redirect('http://localhost:8000/portfolio/Contact')->with('送信完了'); //送信完了を表示
+        // return redirect('http://localhost:8000/portfolio/Contact')->with('送信完了'); //送信完了を表示
     }
 }
