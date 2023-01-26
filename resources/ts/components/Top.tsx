@@ -43,8 +43,10 @@ const Top = () => {
                                 key={index}
                                 id="card_cp"
                                 component="a"
-                                target="_blank"
-                                href={postt.link}
+                                href={
+                                    "http://localhost:8000/portfolio/Work#" +
+                                    postt.id
+                                }
                             >
                                 <div
                                     style={{
