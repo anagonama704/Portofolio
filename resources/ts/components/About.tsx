@@ -7,7 +7,7 @@ const About = () => {
     return (
         <div id="about">
             <Card className="img-flip" id="cards" component="figure">
-                <div className="flex">
+                <div className="flexs">
                     <img
                         src="/images/my_img.jpg"
                         alt=""
@@ -15,21 +15,21 @@ const About = () => {
                     />
                     <div className="fli pro">
                         <h3 className="fli">Profile</h3>
-                        <div className="flex p_pd">
+                        <div className="flexs p_pd">
                             <p>渡辺　慧</p>
                             <p>Watanabe Kei</p>
                         </div>
-                        <div className="flex p_pd">
+                        <div className="flexs p_pd">
                             <p>生年月日：</p>
                             <p>2001年10月9日生まれ</p>
                         </div>
-                        <div className="flex p_pd">
+                        <div className="flexs p_pd">
                             <p>出身地：</p>
                             <p>岐阜県岐阜市</p>
                         </div>
-                        <div className="flex p_pd">
+                        <div className="flexs p_pd">
                             <p>趣味：</p>
-                            <p>音楽を聴くこと（Kpop,洋楽）</p>
+                            <p>音楽を聴くこと（Kpop , 洋楽）</p>
                         </div>
                     </div>
                 </div>
