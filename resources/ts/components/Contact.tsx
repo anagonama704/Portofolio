@@ -1,5 +1,17 @@
 import React, { useState } from "react";
-import { TextField, Card, Button } from "@mui/material";
+import {
+    TextField,
+    Card,
+    Button,
+    RadioGroup,
+    FormControlLabel,
+    FormLabel,
+    FormControl,
+} from "@mui/material";
+import { AiOutlineSlack } from "react-icons/ai";
+import { BsSlack } from "react-icons/bs";
+import { SiGmail } from "react-icons/si";
+import Radio from "@mui/material/Radio";
 import SendIcon from "@mui/icons-material/Send";
 import axios from "axios";
 import "../../css/contact.css";
@@ -95,7 +107,7 @@ const Contact = () => {
                                 maxRows={5}
                                 variant="filled"
                                 style={{
-                                    margin: "50px 0 0 0",
+                                    margin: "20px 0 30px 0",
                                 }}
                                 value={name}
                                 onChange={(e) => setName(e.target.value)}
@@ -108,7 +120,7 @@ const Contact = () => {
                                 maxRows={5}
                                 variant="filled"
                                 style={{
-                                    margin: "30px 0 0 0",
+                                    margin: "0 0 30px 0",
                                 }}
                                 value={mail}
                                 onChange={(e) => setMail(e.target.value)}
@@ -118,36 +130,75 @@ const Contact = () => {
                                 label="お問い合わせ内容"
                                 name="content"
                                 multiline
-                                maxRows={5}
+                                maxRows={3}
                                 variant="outlined"
                                 style={{
                                     backgroundColor: "#00000010",
-                                    margin: "50px 0 0 0",
+                                    margin: "0 0 30px 0",
                                 }}
                                 size="medium"
                                 onChange={(e) => setText(e.target.value)}
                                 value={text}
                             />
                         </div>
-                        <div id="btn">
-                            <Button
-                                variant="contained"
-                                endIcon={<SendIcon />}
-                                // type="submit"
-                                onClick={sendSlackMessage}
-                                className="sbm_btn"
-                            >
-                                ss送信する
-                            </Button>
-                            <Button
-                                variant="contained"
-                                endIcon={<SendIcon />}
-                                // type="submit"
-                                onClick={handleClick}
-                                className="sbm_btn"
-                            >
-                                送信する
-                            </Button>
+                        <div className="btn_g">
+                            <div className="selects">
+                                <FormControl>
+                                    <FormLabel>送信方法</FormLabel>
+                                    <div className="select">
+                                        <RadioGroup
+                                            aria-labelledby="demo-radio-buttons-group-label"
+                                            name="radio-buttons-group"
+                                        >
+                                            <FormControlLabel
+                                                sx={{
+                                                    width: "300px",
+                                                }}
+                                                value="mail"
+                                                control={<Radio />}
+                                                label={
+                                                    <div className="flex">
+                                                        <BsSlack size={20} />
+                                                        <p>Slackで送信</p>
+                                                    </div>
+                                                }
+                                                labelPlacement="end"
+                                            />
+                                            <FormControlLabel
+                                                value="slack"
+                                                control={<Radio />}
+                                                label={
+                                                    <div className="flex">
+                                                        <SiGmail size={20} />
+                                                        <p>Gmailで送信</p>
+                                                    </div>
+                                                }
+                                            />
+                                        </RadioGroup>
+                                    </div>
+                                </FormControl>
+                            </div>
+                            <div className="btn">
+                                <Button
+                                    variant="contained"
+                                    endIcon={<SendIcon />}
+                                    // type="submit"
+                                    onClick={sendSlackMessage}
+                                    className="sbm_btn"
+                                    size="medium"
+                                >
+                                    ss送信する
+                                </Button>
+                                <Button
+                                    variant="contained"
+                                    endIcon={<SendIcon />}
+                                    // type="submit"
+                                    onClick={handleClick}
+                                    className="sbm_btn"
+                                >
+                                    送信する
+                                </Button>
+                            </div>
                         </div>
                     </div>
                 </form>
