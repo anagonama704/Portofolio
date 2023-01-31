@@ -37,10 +37,10 @@
     width: 100%;
 }
 .center {
-    width: 80%;
+    width: 65%;
     height: 315px;
     margin: 0 auto 0 auto;
-    overflow: auto;
+    overflow: visible;
 }
 .btn {
     width: fit-content;
@@ -62,5 +62,6 @@
     padding: 0 0 0 5px;
     width: auto;
 }
-.select {
+.clear:hover {
+    background-color: transparent;
 }
