@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { ReactEventHandler, useState } from "react";
 import {
     TextField,
     Card,
@@ -17,77 +17,79 @@ import axios from "axios";
 import "../../css/contact.css";
 
 const Contact = () => {
-    // axios
-    //     .get("http://localhost:8000/portfolio/Contact")
-    //     .then(function (response) {
-    //         console.log(response.request);
-    //         console.log(response.status);
-    //     });
-
+    //useStateの初期化
     const [name, setName] = useState("");
     const [mail, setMail] = useState("");
     const [text, setText] = useState("");
-
-    const handleClick = () => {
-        // axios
-        //     .post("http://localhost:8000/api/mails", {
-        //         username: name,
-        //     })
-        //     .then((response) => {
-        //         console.log(response);
-        //     });
-        if (name && mail && text) {
-            const params = new URLSearchParams();
-            params.append("username", name);
-            params.append("mails", mail);
-            params.append("content", text);
-
-            axios
-                .post("http://localhost:8000/api/mails", params)
-                .then(function (response: any) {
-                    console.log(response);
-                })
-                .catch(function (error: any) {
-                    console.log(error);
-                });
-
-            alert("送信完了");
-            setName("");
-            setMail("");
-            setText("");
-        } else {
-            alert("全て入力してください");
-        }
+    const [rValue, setRValue] = useState("");
+    //ラジオボタンの値取得
+    const radioState = (event: {
+        target: { value: React.SetStateAction<string> };
+    }) => {
+        setRValue(event.target.value);
     };
 
-    const sendSlackMessage = () => {
-        const payload = {
-            text:
-                "お名前：" +
-                name +
-                "様" +
-                "\nメールアドレス：" +
-                mail +
-                "\nお問い合わせ内容：" +
-                text,
-        };
-        const url =
-            "https://hooks.slack.com/services/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";
-        fetch(url, {
-            method: "POST",
-            body: JSON.stringify(payload),
-        });
-        // const payload = {
-        //     text: text,
-        // };
-        // try {
-        //     axios.post(
-        //         "https://hooks.slack.com/services/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",
-        //         payload
-        //     );
-        // } catch (error) {
-        //     console.log(error);
-        // }
+    const handleClick = () => {
+        //送信方法の分岐
+        if (rValue == "gmail") {
+            if (name && mail && text) {
+                //g-mailでの送信
+                const params = new URLSearchParams();
+                params.append("username", name);
+                params.append("mails", mail);
+                params.append("content", text);
+                //MailControllerとの通信
+                axios
+                    .post("http://localhost:8000/api/mails", params)
+                    .then(function (response: any) {
+                        console.log(response);
+                    })
+                    .catch(function (error: any) {
+                        console.log(error);
+                    });
+
+                alert("送信完了");
+                //値の初期化
+                setName("");
+                setMail("");
+                setText("");
+                setRValue("");
+            } else {
+                alert("全て入力してください");
+            }
+        } else if (rValue == "slack") {
+            if (name && mail && text) {
+                //Slackでの送信
+                const payload = {
+                    text:
+                        "お名前：" +
+                        name +
+                        "様" +
+                        "\nメールアドレス：" +
+                        mail +
+                        "\nお問い合わせ内容：" +
+                        text,
+                };
+                const url =
+                    "https://hooks.slack.com/services/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";
+                //SlackAPIとの通信
+                fetch(url, {
+                    method: "POST",
+                    body: JSON.stringify(payload),
+                });
+
+                alert("送信完了");
+                //値の初期化
+                setName("");
+                setMail("");
+                setText("");
+                setRValue("");
+            } else {
+                alert("全て入力してください");
+            }
+        } else {
+            alert("送信方法を選択してください");
+        }
     };
 
     //xapp-1-A04LH0W3DC4-4694452254211-62e799fe1d12ccd8c558e155dbfc213c263d8395c20e5f1ad2009ad3017596c8
@@ -149,12 +151,15 @@ const Contact = () => {
                                         <RadioGroup
                                             aria-labelledby="demo-radio-buttons-group-label"
                                             name="radio-buttons-group"
+                                            value={rValue}
+                                            onChange={radioState}
                                         >
                                             <FormControlLabel
+                                                id="slack"
                                                 sx={{
                                                     width: "300px",
                                                 }}
-                                                value="mail"
+                                                value="slack"
                                                 control={<Radio />}
                                                 label={
                                                     <div className="flex">
@@ -165,7 +170,8 @@ const Contact = () => {
                                                 labelPlacement="end"
                                             />
                                             <FormControlLabel
-                                                value="slack"
+                                                id="gmail"
+                                                value="gmail"
                                                 control={<Radio />}
                                                 label={
                                                     <div className="flex">
@@ -179,16 +185,6 @@ const Contact = () => {
                                 </FormControl>
                             </div>
                             <div className="btn">
-                                <Button
-                                    variant="contained"
-                                    endIcon={<SendIcon />}
-                                    // type="submit"
-                                    onClick={sendSlackMessage}
-                                    className="sbm_btn"
-                                    size="medium"
-                                >
-                                    ss送信する
-                                </Button>
                                 <Button
                                     variant="contained"
                                     endIcon={<SendIcon />}
