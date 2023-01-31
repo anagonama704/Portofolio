@@ -8,6 +8,8 @@ import {
     FormLabel,
     FormControl,
 } from "@mui/material";
+import IconButton from "@mui/material";
+import { Clear } from "@mui/icons-material";
 import { AiOutlineSlack } from "react-icons/ai";
 import { BsSlack } from "react-icons/bs";
 import { SiGmail } from "react-icons/si";
@@ -97,7 +99,7 @@ const Contact = () => {
     return (
         <div id="contact">
             <Card id="co_card">
-                <form action="http://localhost:8000/api/mails" method="post">
+                <form method="post" onSubmit={(e) => e.preventDefault()}>
                     <div className="forms">
                         <h2>Contact</h2>
                         <div className="center">
@@ -105,34 +107,88 @@ const Contact = () => {
                                 className="u_name"
                                 label="お名前"
                                 name="username"
-                                multiline
-                                maxRows={5}
-                                variant="filled"
+                                variant="outlined"
                                 style={{
+                                    backgroundColor: "#00000010",
                                     margin: "20px 0 30px 0",
                                 }}
                                 value={name}
+                                InputProps={{
+                                    endAdornment: (
+                                        <Button
+                                            className="crear"
+                                            sx={{
+                                                visibility: name
+                                                    ? "visible"
+                                                    : "hidden",
+                                                "&:hover": {
+                                                    backgroundColor:
+                                                        "transparent",
+                                                },
+                                            }}
+                                            onClick={() => {
+                                                setName("");
+                                            }}
+                                        >
+                                            <Clear
+                                                sx={{
+                                                    color: "#999",
+                                                }}
+                                            />
+                                        </Button>
+                                    ),
+                                }}
                                 onChange={(e) => setName(e.target.value)}
                             />
                             <TextField
                                 className="mail"
                                 label="メールアドレス"
                                 name="mails"
-                                multiline
-                                maxRows={5}
-                                variant="filled"
+                                variant="outlined"
                                 style={{
+                                    backgroundColor: "#00000010",
                                     margin: "0 0 30px 0",
                                 }}
                                 value={mail}
-                                onChange={(e) => setMail(e.target.value)}
+                                InputProps={{
+                                    endAdornment: (
+                                        <Button
+                                            className="crear"
+                                            sx={{
+                                                visibility: mail
+                                                    ? "visible"
+                                                    : "hidden",
+                                                "&:hover": {
+                                                    backgroundColor:
+                                                        "transparent",
+                                                },
+                                            }}
+                                            onClick={() => {
+                                                setMail("");
+                                            }}
+                                            variant="text"
+                                            style={{
+                                                backgroundColor: "transparent",
+                                            }}
+                                        >
+                                            <Clear
+                                                sx={{
+                                                    color: "#999",
+                                                }}
+                                            />
+                                        </Button>
+                                    ),
+                                }}
+                                onChange={(e) => {
+                                    setMail(e.target.value);
+                                }}
                             />
                             <TextField
                                 className="content"
                                 label="お問い合わせ内容"
                                 name="content"
                                 multiline
-                                maxRows={3}
+                                rows={3}
                                 variant="outlined"
                                 style={{
                                     backgroundColor: "#00000010",
@@ -141,6 +197,35 @@ const Contact = () => {
                                 size="medium"
                                 onChange={(e) => setText(e.target.value)}
                                 value={text}
+                                InputProps={{
+                                    endAdornment: (
+                                        <Button
+                                            className="crear"
+                                            sx={{
+                                                visibility: text
+                                                    ? "visible"
+                                                    : "hidden",
+                                                "&:hover": {
+                                                    backgroundColor:
+                                                        "transparent",
+                                                },
+                                            }}
+                                            onClick={() => {
+                                                setText("");
+                                            }}
+                                            variant="text"
+                                            style={{
+                                                backgroundColor: "transparent",
+                                            }}
+                                        >
+                                            <Clear
+                                                sx={{
+                                                    color: "#999",
+                                                }}
+                                            />
+                                        </Button>
+                                    ),
+                                }}
                             />
                         </div>
                         <div className="btn_g">
@@ -188,7 +273,6 @@ const Contact = () => {
                                 <Button
                                     variant="contained"
                                     endIcon={<SendIcon />}
-                                    // type="submit"
                                     onClick={handleClick}
                                     className="sbm_btn"
                                 >
