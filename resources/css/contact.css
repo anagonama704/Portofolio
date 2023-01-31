@@ -38,12 +38,14 @@
 }
 .center {
     width: 80%;
-    height: auto;
+    height: 315px;
     margin: 0 auto 0 auto;
     overflow: auto;
 }
 .btn {
     width: fit-content;
+    display: flex;
+    align-items: flex-end;
 }
 .btn_g {
     width: 80%;
