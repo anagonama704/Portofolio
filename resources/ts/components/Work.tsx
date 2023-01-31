@@ -42,7 +42,6 @@ const Works = () => {
     return (
         <div id="work">
             <h2>Work</h2>
-
             <Slider
                 dots
                 infinite
@@ -56,11 +55,10 @@ const Works = () => {
             >
                 {post.map((postt, index) => {
                     return (
-                        <div className="slide_cmp">
+                        <div className="slide_cmp" key={index}>
                             <Card
                                 id={"" + postt.id}
                                 className="work_cmp"
-                                key={index}
                                 component="a"
                                 href={
                                     "https://anagonama704.github.io/" +
