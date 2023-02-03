@@ -32,7 +32,7 @@ const Main = () => {
     };
 
     const doubles = (e: React.MouseEvent<HTMLInputElement>) => {
-        const ok = e.target;
+        const ok = e.currentTarget.id;
         console.log(ok);
     };
 
