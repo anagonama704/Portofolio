@@ -1,5 +1,5 @@
 import React, { useEffect } from "react";
-import { Card, Typography } from "@mui/material";
+import { Card } from "@mui/material";
 import axios from "axios";
 
 import "../../css/top.css";
