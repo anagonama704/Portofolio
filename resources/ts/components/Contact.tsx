@@ -1,4 +1,4 @@
-import React, { ReactEventHandler, useState } from "react";
+import React, { useState } from "react";
 import {
     TextField,
     Card,
@@ -8,9 +8,7 @@ import {
     FormLabel,
     FormControl,
 } from "@mui/material";
-import IconButton from "@mui/material";
 import { Clear } from "@mui/icons-material";
-import { AiOutlineSlack } from "react-icons/ai";
 import { BsSlack } from "react-icons/bs";
 import { SiGmail } from "react-icons/si";
 import Radio from "@mui/material/Radio";
@@ -50,7 +48,7 @@ const Contact = () => {
                         console.log(error);
                     });
 
-                alert("送信完了");
+                alert("送信しました");
                 //値の初期化
                 setName("");
                 setMail("");
@@ -80,7 +78,7 @@ const Contact = () => {
                     body: JSON.stringify(payload),
                 });
 
-                alert("送信完了");
+                alert("送信しました");
                 //値の初期化
                 setName("");
                 setMail("");
@@ -108,11 +106,15 @@ const Contact = () => {
                                 label="お名前"
                                 name="username"
                                 variant="outlined"
+                                autoComplete="off"
                                 style={{
                                     backgroundColor: "#00000010",
                                     margin: "20px 0 30px 0",
                                 }}
                                 value={name}
+                                inputProps={{
+                                    maxlength: 60,
+                                }}
                                 InputProps={{
                                     endAdornment: (
                                         <Button
@@ -150,6 +152,9 @@ const Contact = () => {
                                     margin: "0 0 30px 0",
                                 }}
                                 value={mail}
+                                inputProps={{
+                                    maxlength: 254,
+                                }}
                                 InputProps={{
                                     endAdornment: (
                                         <Button
