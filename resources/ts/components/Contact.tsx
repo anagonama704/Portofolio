@@ -18,6 +18,15 @@ import "../../css/contact.css";
 
 const Contact = () => {
     //useStateの初期化
+    const [slackKey, setSlackKey] = useState("");
+    axios
+        .get("http://localhost:8000/api/slacks")
+        .then((response) => {
+            setSlackKey(response.data);
+        })
+        .catch(() => {
+            console.log("err");
+        });
     const [name, setName] = useState("");
     const [mail, setMail] = useState("");
     const [text, setText] = useState("");
@@ -70,8 +79,7 @@ const Contact = () => {
                         "\nお問い合わせ内容：" +
                         text,
                 };
-                const url =
-                    "https://hooks.slack.com/services/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";
+                const url = slackKey;
                 //SlackAPIとの通信
                 fetch(url, {
                     method: "POST",
@@ -112,9 +120,7 @@ const Contact = () => {
                                     margin: "20px 0 30px 0",
                                 }}
                                 value={name}
-                                inputProps={{
-                                    maxlength: 60,
-                                }}
+                                inputProps={{}}
                                 InputProps={{
                                     endAdornment: (
                                         <Button
@@ -152,9 +158,7 @@ const Contact = () => {
                                     margin: "0 0 30px 0",
                                 }}
                                 value={mail}
-                                inputProps={{
-                                    maxlength: 254,
-                                }}
+                                inputProps={{}}
                                 InputProps={{
                                     endAdornment: (
                                         <Button
