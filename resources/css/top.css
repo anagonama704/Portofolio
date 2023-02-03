@@ -11,9 +11,11 @@
 #mainarea h2 {
     text-align: center;
     padding: 25% 0 0 0;
+    font-size: 25px;
 }
 #mainarea p {
     text-align: center;
+    font-size: 15px;
 }
 
 #top_work {
