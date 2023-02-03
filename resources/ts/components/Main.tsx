@@ -1,7 +1,14 @@
-import React, { useState, useEffect, Fragment } from "react";
+import React, { useState, useEffect, Fragment, ReactEventHandler } from "react";
 import axios from "axios";
+import { SiPostmates } from "react-icons/si";
+import { display } from "@mui/system";
+import { ReactJSXElement } from "@emotion/react/types/jsx-namespace";
 
 const Main = () => {
+    type postmans = {
+        id: number;
+        name: string;
+    };
     const main: string = "testsテーブルの中身";
 
     const track = document.head.querySelector(
@@ -12,7 +19,7 @@ const Main = () => {
         getData();
     }, []);
 
-    const [post, setPost] = React.useState([]);
+    const [post, setPost] = React.useState<postmans[]>([]);
     const getData = async () => {
         await axios
             .get("http://localhost:8000/api/posts")
@@ -22,6 +29,11 @@ const Main = () => {
             .catch(() => {
                 console.log("err");
             });
+    };
+
+    const doubles = (e: React.MouseEvent<HTMLInputElement>) => {
+        const ok = e.target;
+        console.log(ok);
     };
 
     console.log(post);
@@ -38,17 +50,25 @@ const Main = () => {
                     </tr>
                 </thead>
                 <tbody>
-                    {post.map((row, index) => (
-                        <tr key={index}>
-                            {Object.keys(row).map(function (key, i) {
-                                return (
-                                    <td align="center" key={i}>
-                                        {row[key]}
-                                    </td>
-                                );
-                            })}
-                        </tr>
-                    ))}
+                    {post.map((post, index) => {
+                        return (
+                            <tr key={index}>
+                                <td
+                                    align="center"
+                                    key={index}
+                                    style={{ display: "flex" }}
+                                >
+                                    <p onDoubleClick={doubles}>{post.id}</p>
+                                    <p
+                                        onDoubleClick={doubles}
+                                        className={post.id + ""}
+                                    >
+                                        {post.name}
+                                    </p>
+                                </td>
+                            </tr>
+                        );
+                    })}
                 </tbody>
             </table>
             <div className="inp">
