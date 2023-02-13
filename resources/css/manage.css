@@ -1,0 +1,88 @@
+.manage_cmp {
+    width: 85%;
+    height: auto;
+    margin: 0 auto;
+    display: flex;
+    align-items: center;
+}
+.insertarea {
+    width: 30%;
+    height: 600px;
+    padding: 25px 0;
+    background-color: antiquewhite;
+}
+
+.prev_master {
+    width: 70%;
+    height: auto;
+}
+.prev_card {
+    width: 100%;
+    height: auto;
+}
+.prev_cmp {
+    width: 85%;
+    height: auto;
+    padding: 80px 20px;
+    margin: 0 0 0 auto;
+    display: flex;
+    justify-content: space-around;
+    align-items: center;
+}
+#prev_img {
+    width: 400px;
+    height: 220px;
+    background-color: rgb(211, 231, 231);
+}
+.prev_imgs {
+    width: 85%;
+    height: 85%;
+    background-size: cover;
+    margin: 3% auto;
+}
+.prev_p {
+    width: 40%;
+    height: fit-content;
+    padding: 0 0 20px 0;
+}
+.onview {
+    display: block;
+}
+.noview {
+    display: none;
+}
+.btns {
+    width: fit-content;
+    height: auto;
+    background-color: aqua;
+    display: flex;
+    justify-content: space-between;
+    margin: 0 auto;
+}
+.ins_btn {
+    width: 200px;
+    height: auto;
+}
+.deletes {
+    width: 100px;
+}
+.workname {
+    width: 80%;
+}
+.main {
+    padding: 50px 0 0 0;
+}
+.input_cmp {
+    width: auto;
+    height: auto;
+}
+.textbox {
+    word-break: break-all;
+}
+.spaces::after {
+    content: "";
+    padding: 0 5px 0 0;
+}
+.i_manth {
+    width: 100px;
+}
