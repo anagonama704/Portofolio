@@ -70,7 +70,7 @@ const Works = () => {
                                 <Card id="img_cmp">
                                     <div
                                         style={{
-                                            backgroundImage: `url(/images/${postt.path})`,
+                                            backgroundImage: `url(/images/workImages/${postt.path})`,
                                         }}
                                         className="work_img"
                                     ></div>
