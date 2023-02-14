@@ -7,11 +7,14 @@
 }
 .insertarea {
     width: 30%;
-    height: 600px;
+    height: auto;
     padding: 25px 0;
     background-color: antiquewhite;
 }
-
+.insertarea h2 {
+    width: auto;
+    text-align: center;
+}
 .prev_master {
     width: 70%;
     height: auto;
@@ -38,7 +41,7 @@
     width: 85%;
     height: 85%;
     background-size: cover;
-    margin: 3% auto;
+    margin: 4% auto 0 auto;
 }
 .prev_p {
     width: 40%;
@@ -52,12 +55,12 @@
     display: none;
 }
 .btns {
-    width: fit-content;
-    height: auto;
-    background-color: aqua;
+    width: 500px;
+    height: 50px;
     display: flex;
-    justify-content: space-between;
-    margin: 0 auto;
+    justify-content: space-around;
+    margin: 100px auto 0 auto;
+    padding: 0 0 0 50px;
 }
 .ins_btn {
     width: 200px;
@@ -68,13 +71,16 @@
 }
 .workname {
     width: 80%;
+    height: auto;
+    margin: 0 0 50px 0;
 }
 .main {
-    padding: 50px 0 0 0;
+    padding: 40px 0 35px 0;
 }
 .input_cmp {
-    width: auto;
+    width: 300px;
     height: auto;
+    margin: 0 auto;
 }
 .textbox {
     word-break: break-all;
@@ -83,6 +89,24 @@
     content: "";
     padding: 0 5px 0 0;
 }
-.i_manth {
+.i_month {
+    width: 50px;
+}
+.s_month {
+    width: 70px;
+}
+.select_image {
     width: 100px;
+    height: 100px;
+    background-color: bisque;
+}
+.img_inp {
+    width: fit-content;
+    height: auto;
+    margin: 0 auto;
+}
+.month_master {
+    width: fit-content;
+    height: auto;
+    margin: 0 auto;
 }
