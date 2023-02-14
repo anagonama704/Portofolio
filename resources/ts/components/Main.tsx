@@ -6,13 +6,22 @@ import React, {
     useRef,
 } from "react";
 import axios from "axios";
-import { Card, Button, TextField, Box } from "@mui/material";
+import {
+    Card,
+    Button,
+    TextField,
+    Box,
+    MenuItem,
+    IconButton,
+} from "@mui/material";
 import SendIcon from "@mui/icons-material/Send";
 import DeleteIcon from "@mui/icons-material/Delete";
+import RotateLeftIcon from "@mui/icons-material/RotateLeft";
+import { PhotoCamera } from "@mui/icons-material";
 import "../../css/manage.css";
-import { WrapText } from "@mui/icons-material";
 
 const Main = () => {
+    //型の定義
     type postmans = {
         id: number;
         name: string;
@@ -27,15 +36,45 @@ const Main = () => {
         f_camp: string;
         e_camp: string;
     };
+    type periods = {
+        label: string;
+        value: string;
+    };
+    const mtSelect = [
+        {
+            label: "週間",
+            value: " 週間",
+        },
+        {
+            label: "ヶ月",
+            value: " ヶ月",
+        },
+        {
+            label: "年",
+            value: " 年",
+        },
+    ];
+    // useStateの定義
+    const [image, setImage] = useState("");
+    const [inputName, setInputName] = useState("");
+    const [inputAward, setInputAward] = useState("");
+    const [inputWorkex, setInputWorkex] = useState("");
+    const [inputPeriod, setInputPeriod] = useState("");
+    const [inputPdate, setInputPdate] = useState("");
+    const [prev, setPrev] = useState("/images/default.png");
     const [names, setNames] = useState("作品名");
     const [awards, setAwards] = useState("受賞名など");
     const [workex, setWorkex] = useState("作品詳細");
     const [period, setPeriod] = useState("0");
+    const [pdate, setPdate] = useState(" ヶ月");
     const [active, setActive] = useState(false);
+    const allForm = useRef<HTMLFormElement>(null);
     const h3cp = useRef<HTMLHeadingElement>(null);
+    const imgRef = useRef<HTMLInputElement>(null);
     const nameRef = useRef<HTMLInputElement>(null);
     const awardRef = useRef<HTMLInputElement>(null);
     const wkexRef = useRef<HTMLInputElement>(null);
+    const monthRef = useRef<HTMLInputElement>(null);
 
     //CSRF対策
     const track = document.head.querySelector(
@@ -64,9 +103,28 @@ const Main = () => {
         setActive(!active);
         console.log(active);
     };
+    const wkName = (e: React.ChangeEvent<HTMLInputElement>) => {
+        setInputName(e.target.value);
+        setNames(e.target.value);
+        if (e.target.value == "") {
+            setNames("作品名");
+        }
+    };
+    const wkAward = (e: React.ChangeEvent<HTMLInputElement>) => {
+        setInputAward(e.target.value);
+
+        setAwards(e.target.value);
+        if (e.target.value == "") {
+            setAwards("受賞名など");
+        }
+    };
 
     const workEx = (e: React.ChangeEvent<HTMLInputElement>) => {
+        setInputWorkex(e.target.value);
         setWorkex(e.target.value);
+        if (e.target.value == "") {
+            setWorkex("作品詳細");
+        }
     };
     const keypr = (e: React.KeyboardEvent<HTMLInputElement>) => {
         const counts = workex.match(/\n/g)?.length;
@@ -78,56 +136,107 @@ const Main = () => {
         } else {
         }
     };
+    const workImage = (e: React.ChangeEvent<HTMLInputElement>) => {
+        if (!e.target.files) return;
 
-    console.log(post);
+        setImage(e.target.value);
+        const files = e.target.files[0];
 
-    console.log(post[8]);
+        setPrev(window.URL.createObjectURL(files));
+    };
+    const allReset = () => {
+        setImage("");
+        setPrev("/images/default.png");
+        setNames("作品名");
+        setAwards("受賞名など");
+        setWorkex("作品詳細");
+        setPeriod("0");
+        setPdate(" ヶ月");
+        setInputName("");
+        setInputAward("");
+        setInputWorkex("");
+        setInputPeriod("");
+        setInputPdate("");
+    };
+    const newPut = () => {
+        console.log(inputName);
+        console.log(inputAward);
+        console.log(inputWorkex);
+        console.log(inputPeriod + pdate);
+        console.log(image);
+    };
 
     return (
         <div className="main">
             <div className="manage_cmp">
                 <Card component="div" className="insertarea">
-                    <h2>新規挿入</h2>
-                    <Box component="form" className="inputcmp">
+                    <h2>新規追加</h2>
+                    <Box component="form" className="input_cmp" ref={allForm}>
+                        <Box className="img_inp">
+                            <IconButton
+                                className="select_image"
+                                color="primary"
+                                aria-label="upload picture"
+                                component="label"
+                                sx={{
+                                    backgroundColor: "#d3e7e7",
+                                    margin: "15px 0 5px 0",
+                                }}
+                            >
+                                <input
+                                    ref={imgRef}
+                                    hidden
+                                    accept="image/*"
+                                    type="file"
+                                    onChange={workImage}
+                                />
+                                <PhotoCamera fontSize="large" />
+                            </IconButton>
+                        </Box>
                         <TextField
                             id="outlined-multiline"
                             className="workname"
                             inputRef={nameRef}
                             label="作品名"
                             placeholder="作品名を入力してください"
+                            fullWidth
+                            margin="normal"
                             inputMode="text"
                             inputProps={{
                                 maxLength: 20,
                             }}
-                            onChange={(e) => {
-                                setNames(e.target.value);
-                            }}
-                        ></TextField>
+                            value={inputName}
+                            onChange={wkName}
+                        />
                         <TextField
                             id="outlined-multiline"
                             className="workname"
                             label="受賞した賞の名前"
                             placeholder="受賞歴があれば入力してください"
+                            fullWidth
+                            margin="normal"
                             inputRef={awardRef}
                             inputMode="text"
                             inputProps={{
-                                maxLength: 31,
+                                maxLength: 30,
                             }}
-                            onChange={(e) => {
-                                setAwards(e.target.value);
-                            }}
-                        ></TextField>
+                            value={inputAward}
+                            onChange={wkAward}
+                        />
                         <TextField
                             id="outlined-multiline"
                             className="workname textbox"
                             type="text"
                             label="作品の詳細"
+                            fullWidth
+                            margin="normal"
                             placeholder="作品のこだわりなど"
                             inputRef={wkexRef}
                             inputMode="text"
                             maxRows={4}
                             minRows={4}
                             multiline
+                            value={inputWorkex}
                             onChange={workEx}
                             onKeyPress={keypr}
                             // onChange={(e) => {
@@ -142,18 +251,47 @@ const Main = () => {
                             //     }
                             //     setWorkex(e.target.value);
                             // }}
-                        ></TextField>
-                        <TextField
-                            id="standard-number"
-                            className="i_manth"
-                            label="制作期間"
-                            type="number"
-                            placeholder="0"
-                            InputLabelProps={{
-                                shrink: true,
-                            }}
-                            variant="standard"
                         />
+                        <div className="month_master">
+                            <TextField
+                                id="standard-number"
+                                className="i_month"
+                                inputRef={monthRef}
+                                label="制作期間"
+                                type="number"
+                                margin="normal"
+                                InputLabelProps={{
+                                    shrink: true,
+                                }}
+                                variant="standard"
+                                value={period}
+                                onChange={(e) => {
+                                    setInputPeriod(e.target.value);
+                                    setPeriod(e.target.value);
+                                }}
+                            />
+                            <TextField
+                                id="standard-select-currency"
+                                className="s_month"
+                                select
+                                label=" "
+                                margin="normal"
+                                defaultValue=" ヶ月"
+                                variant="standard"
+                                onChange={(e) => {
+                                    setPdate(e.target.value);
+                                }}
+                            >
+                                {mtSelect.map((option) => (
+                                    <MenuItem
+                                        key={option.value}
+                                        value={option.value}
+                                    >
+                                        {option.label}
+                                    </MenuItem>
+                                ))}
+                            </TextField>
+                        </div>
                     </Box>
                 </Card>
                 <div className="prev_master">
@@ -166,12 +304,13 @@ const Main = () => {
                         >
                             <Card id="prev_img">
                                 <div
-                                    style={
-                                        {
-                                            // backgroundImage: `url(/images/)`,
-                                        }
-                                    }
+                                    style={{
+                                        backgroundImage: `url(${prev})`,
+                                    }}
                                     className="prev_imgs"
+                                    onClick={(e) => {
+                                        imgRef.current?.click();
+                                    }}
                                 ></div>
                             </Card>
                             <div className="prev_p" ref={h3cp}>
@@ -205,10 +344,14 @@ const Main = () => {
                                         display: "flex",
                                         padding: "10px 0 0 0",
                                     }}
+                                    onClick={(e) => {
+                                        monthRef.current?.focus();
+                                    }}
                                 >
                                     <p>制作期間：</p>
                                     <p className="spaces">
-                                        {period} {period}
+                                        {period}
+                                        {pdate}
                                     </p>
                                 </div>
                             </div>
@@ -216,10 +359,26 @@ const Main = () => {
                         <div className="btns">
                             <Button
                                 className="ins_btn"
+                                variant="outlined"
+                                endIcon={<RotateLeftIcon />}
+                                sx={{
+                                    backgroundColor: "#fff",
+                                    fontSize: "18px",
+                                }}
+                                onClick={allReset}
+                            >
+                                リセット
+                            </Button>
+                            <Button
+                                className="ins_btn"
                                 variant="contained"
                                 endIcon={<SendIcon />}
+                                onClick={newPut}
+                                sx={{
+                                    fontSize: "18px",
+                                }}
                             >
-                                更新
+                                追加
                             </Button>
 
                             {/* <Button
