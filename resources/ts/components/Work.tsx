@@ -37,15 +37,14 @@ const Works = () => {
                 console.log("err");
             });
     };
-    console.log(post);
 
     return (
         <div id="work">
             <h2>Work</h2>
             <Slider
                 dots
-                infinite
                 lazyLoad="ondemand"
+                infinite
                 slidesToShow={1}
                 slidesToScroll={1}
                 className="slides"
