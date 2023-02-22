@@ -13,12 +13,28 @@ import {
     Box,
     MenuItem,
     IconButton,
+    Chip,
+    ToggleButtonGroup,
+    ToggleButton,
 } from "@mui/material";
+import Table from "@mui/material/Table";
+import TableBody from "@mui/material/TableBody";
+import TableCell from "@mui/material/TableCell";
+import TableContainer from "@mui/material/TableContainer";
+import TableHead from "@mui/material/TableHead";
+import TableRow from "@mui/material/TableRow";
+import Paper from "@mui/material/Paper";
 import SendIcon from "@mui/icons-material/Send";
 import DeleteIcon from "@mui/icons-material/Delete";
 import RotateLeftIcon from "@mui/icons-material/RotateLeft";
+import { Add } from "@mui/icons-material";
+import { ManageHistory } from "@mui/icons-material";
 import { PhotoCamera } from "@mui/icons-material";
+import Slider from "react-slick";
+import "slick-carousel/slick/slick.css";
+import "slick-carousel/slick/slick-theme.css";
 import "../../css/manage.css";
+import { maxHeight } from "@mui/system";
 
 const Main = () => {
     //型の定義
@@ -29,16 +45,12 @@ const Main = () => {
         link: string;
         w_id: number;
         infos: string;
-        created_at: Date;
-        updated_at: Date;
+        created_at: string;
+        updated_at: string;
         award: string;
         creation_time: string;
         f_camp: string;
         e_camp: string;
-    };
-    type periods = {
-        label: string;
-        value: string;
     };
     const mtSelect = [
         {
@@ -55,6 +67,7 @@ const Main = () => {
         },
     ];
     // useStateの定義
+    const [inpCnt, setInpCnt] = useState(true);
     const [image, setImage] = useState("");
     const [inputName, setInputName] = useState("");
     const [inputAward, setInputAward] = useState("");
@@ -68,6 +81,11 @@ const Main = () => {
     const [period, setPeriod] = useState("0");
     const [pdate, setPdate] = useState(" ヶ月");
     const [active, setActive] = useState(false);
+    const [toggleV, setToggleV] = useState("add");
+    const [updateP, setUpdateP] = useState(0);
+    // const [addT, setAddT] = useState("add");
+    // const [manageT, setManageT] = useState("outlined");
+    const slicker = useRef<Slider>(null);
     const allForm = useRef<HTMLFormElement>(null);
     const h3cp = useRef<HTMLHeadingElement>(null);
     const imgRef = useRef<HTMLInputElement>(null);
@@ -164,138 +182,247 @@ const Main = () => {
         console.log(inputWorkex);
         console.log(inputPeriod + pdate);
         console.log(image);
+        console.log(post[updateP].updated_at);
+    };
+    const addPage = () => {
+        window.setTimeout(function () {
+            setToggleV("add");
+            setInpCnt(true);
+            if (toggleV == "managed") slicker.current?.slickNext();
+        }, 100);
+    };
+    const managedPage = () => {
+        window.setTimeout(function () {
+            setToggleV("managed");
+            setInpCnt(false);
+            if (toggleV == "add") slicker.current?.slickNext();
+        }, 100);
+    };
+    const updatePrev = (e: React.MouseEvent<HTMLTableRowElement>) => {
+        console.log(e.currentTarget.id);
+        setUpdateP(Number(e.currentTarget.id));
     };
 
     return (
         <div className="main">
             <div className="manage_cmp">
-                <Card component="div" className="insertarea">
-                    <h2>新規追加</h2>
-                    <Box component="form" className="input_cmp" ref={allForm}>
-                        <Box className="img_inp">
-                            <IconButton
-                                className="select_image"
-                                color="primary"
-                                aria-label="upload picture"
-                                component="label"
-                                sx={{
-                                    backgroundColor: "#d3e7e7",
-                                    margin: "15px 0 5px 0",
-                                }}
-                            >
-                                <input
-                                    ref={imgRef}
-                                    hidden
-                                    accept="image/*"
-                                    type="file"
-                                    onChange={workImage}
-                                />
-                                <PhotoCamera fontSize="large" />
-                            </IconButton>
-                        </Box>
-                        <TextField
-                            id="outlined-multiline"
-                            className="workname"
-                            inputRef={nameRef}
-                            label="作品名"
-                            placeholder="作品名を入力してください"
-                            fullWidth
-                            margin="normal"
-                            inputMode="text"
-                            inputProps={{
-                                maxLength: 20,
-                            }}
-                            value={inputName}
-                            onChange={wkName}
-                        />
-                        <TextField
-                            id="outlined-multiline"
-                            className="workname"
-                            label="受賞した賞の名前"
-                            placeholder="受賞歴があれば入力してください"
-                            fullWidth
-                            margin="normal"
-                            inputRef={awardRef}
-                            inputMode="text"
-                            inputProps={{
-                                maxLength: 30,
-                            }}
-                            value={inputAward}
-                            onChange={wkAward}
-                        />
-                        <TextField
-                            id="outlined-multiline"
-                            className="workname textbox"
-                            type="text"
-                            label="作品の詳細"
-                            fullWidth
-                            margin="normal"
-                            placeholder="作品のこだわりなど"
-                            inputRef={wkexRef}
-                            inputMode="text"
-                            maxRows={4}
-                            minRows={4}
-                            multiline
-                            value={inputWorkex}
-                            onChange={workEx}
-                            onKeyPress={keypr}
-                            // onChange={(e) => {
-                            //     const counts = workex.match(/\n/g)?.length;
-                            //     console.log(counts);
-                            //     if (counts) {
-                            //         if (counts <= 4) {
-                            //         } else {
-                            //             e.preventDefault();
-                            //         }
-                            //     } else {
-                            //     }
-                            //     setWorkex(e.target.value);
-                            // }}
-                        />
-                        <div className="month_master">
+                <Slider
+                    ref={slicker}
+                    slidesToShow={1}
+                    className="ins_card"
+                    arrows={false}
+                >
+                    <Card className="cards">
+                        <h2>新規追加</h2>
+                        <Box
+                            component="form"
+                            className="input_cmp"
+                            ref={allForm}
+                        >
+                            <Box className="img_inp">
+                                <IconButton
+                                    className="select_image"
+                                    color="primary"
+                                    aria-label="upload picture"
+                                    component="label"
+                                    sx={{
+                                        backgroundColor: "#d3e7e7",
+                                        margin: "15px 0 5px 0",
+                                    }}
+                                >
+                                    <input
+                                        ref={imgRef}
+                                        hidden
+                                        accept="image/*"
+                                        type="file"
+                                        onChange={workImage}
+                                    />
+                                    <PhotoCamera fontSize="large" />
+                                </IconButton>
+                            </Box>
                             <TextField
-                                id="standard-number"
-                                className="i_month"
-                                inputRef={monthRef}
-                                label="制作期間"
-                                type="number"
+                                id="outlined-multiline"
+                                className="workname"
+                                inputRef={nameRef}
+                                label="作品名"
+                                placeholder="作品名を入力してください"
+                                fullWidth
                                 margin="normal"
-                                InputLabelProps={{
-                                    shrink: true,
+                                inputMode="text"
+                                inputProps={{
+                                    maxLength: 20,
                                 }}
-                                variant="standard"
-                                value={period}
-                                onChange={(e) => {
-                                    setInputPeriod(e.target.value);
-                                    setPeriod(e.target.value);
-                                }}
+                                value={inputName}
+                                onChange={wkName}
                             />
                             <TextField
-                                id="standard-select-currency"
-                                className="s_month"
-                                select
-                                label=" "
+                                id="outlined-multiline"
+                                className="workname"
+                                label="受賞した賞の名前"
+                                placeholder="受賞歴があれば入力してください"
+                                fullWidth
                                 margin="normal"
-                                defaultValue=" ヶ月"
-                                variant="standard"
-                                onChange={(e) => {
-                                    setPdate(e.target.value);
+                                inputRef={awardRef}
+                                inputMode="text"
+                                inputProps={{
+                                    maxLength: 30,
                                 }}
-                            >
-                                {mtSelect.map((option) => (
-                                    <MenuItem
-                                        key={option.value}
-                                        value={option.value}
-                                    >
-                                        {option.label}
-                                    </MenuItem>
-                                ))}
-                            </TextField>
-                        </div>
-                    </Box>
-                </Card>
+                                value={inputAward}
+                                onChange={wkAward}
+                            />
+                            <TextField
+                                id="outlined-multiline"
+                                className="workname textbox"
+                                type="text"
+                                label="作品の詳細"
+                                fullWidth
+                                margin="normal"
+                                placeholder="作品のこだわりなど"
+                                inputRef={wkexRef}
+                                inputMode="text"
+                                maxRows={4}
+                                minRows={4}
+                                multiline
+                                value={inputWorkex}
+                                onChange={workEx}
+                                onKeyPress={keypr}
+                                // onChange={(e) => {
+                                //     const counts = workex.match(/\n/g)?.length;
+                                //     console.log(counts);
+                                //     if (counts) {
+                                //         if (counts <= 4) {
+                                //         } else {
+                                //             e.preventDefault();
+                                //         }
+                                //     } else {
+                                //     }
+                                //     setWorkex(e.target.value);
+                                // }}
+                            />
+                            <div className="month_master">
+                                <TextField
+                                    id="standard-number"
+                                    className="i_month"
+                                    inputRef={monthRef}
+                                    label="制作期間"
+                                    type="number"
+                                    margin="normal"
+                                    InputLabelProps={{
+                                        shrink: true,
+                                    }}
+                                    variant="standard"
+                                    value={period}
+                                    onChange={(e) => {
+                                        setInputPeriod(e.target.value);
+                                        setPeriod(e.target.value);
+                                    }}
+                                />
+                                <TextField
+                                    id="standard-select-currency"
+                                    className="s_month"
+                                    select
+                                    label=" "
+                                    margin="normal"
+                                    defaultValue=" ヶ月"
+                                    variant="standard"
+                                    onChange={(e) => {
+                                        setPdate(e.target.value);
+                                    }}
+                                >
+                                    {mtSelect.map((option) => (
+                                        <MenuItem
+                                            key={option.value}
+                                            value={option.value}
+                                        >
+                                            {option.label}
+                                        </MenuItem>
+                                    ))}
+                                </TextField>
+                            </div>
+                        </Box>
+                    </Card>
+                    <Card className="cards">
+                        <h2>作品管理</h2>
+                        <TableContainer
+                            component={Paper}
+                            style={{ minHeight: "500px", maxHeight: "500px" }}
+                        >
+                            <Table stickyHeader>
+                                <TableHead>
+                                    <TableRow>
+                                        <TableCell>ID</TableCell>
+                                        <TableCell>作品名</TableCell>
+                                        <TableCell>更新日時</TableCell>
+                                    </TableRow>
+                                </TableHead>
+                                <TableBody>
+                                    {post.map((postt, index) => {
+                                        return (
+                                            <TableRow
+                                                key={index}
+                                                id={"" + postt.id}
+                                                hover
+                                                onClick={updatePrev}
+                                            >
+                                                <TableCell>
+                                                    {postt.id}
+                                                </TableCell>
+                                                <TableCell>
+                                                    {postt.name}
+                                                </TableCell>
+                                                <TableCell>
+                                                    {postt.updated_at}
+                                                </TableCell>
+                                            </TableRow>
+                                        );
+                                    })}
+                                </TableBody>
+                            </Table>
+                        </TableContainer>
+                    </Card>
+                </Slider>
                 <div className="prev_master">
                     <div className="prev_card">
+                        <ToggleButtonGroup exclusive value={toggleV}>
+                            <ToggleButton
+                                value="add"
+                                onClick={addPage}
+                                sx={{
+                                    backgroundColor: inpCnt
+                                        ? "#2196f3"
+                                        : "#fff",
+                                }}
+                            >
+                                <div
+                                    style={{
+                                        display: "flex",
+                                        alignItems: "center",
+                                    }}
+                                >
+                                    <Add />
+                                    <p>新規追加</p>
+                                </div>
+                            </ToggleButton>
+                            <ToggleButton
+                                value="managed"
+                                onClick={managedPage}
+                                sx={{
+                                    backgroundColor: inpCnt
+                                        ? "#fff"
+                                        : "#2196f3",
+                                }}
+                            >
+                                <div
+                                    style={{
+                                        display: "flex",
+                                        alignItems: "center",
+                                    }}
+                                >
+                                    <ManageHistory />
+                                    <p>作品管理</p>
+                                </div>
+                            </ToggleButton>
+                        </ToggleButtonGroup>
                         <Card
                             id="a"
                             className="prev_cmp"
