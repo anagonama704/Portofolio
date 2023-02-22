@@ -8,10 +8,17 @@
 .insertarea {
     width: 30%;
     height: auto;
-    padding: 25px 0;
     background-color: antiquewhite;
 }
-.insertarea h2 {
+.ins_card {
+    width: 30%;
+    height: auto;
+    padding: 0 0;
+}
+.cards {
+    padding: 25px 0;
+}
+h2 {
     width: auto;
     text-align: center;
 }
@@ -109,4 +116,7 @@
     width: fit-content;
     height: auto;
     margin: 0 auto;
+}
+.select_chips {
+    background-color: #fff;
 }
