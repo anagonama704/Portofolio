@@ -50,7 +50,7 @@ const Top = () => {
                             >
                                 <div
                                     style={{
-                                        backgroundImage: `url(/images/${postt.path})`,
+                                        backgroundImage: `url(/images/workImages/${postt.path})`,
                                     }}
                                     className="cp_img"
                                 ></div>
