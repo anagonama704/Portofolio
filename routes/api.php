@@ -22,5 +22,8 @@ Route::group(['middleware' => 'api'], function () {
     Route::get('/works', 'App\Http\Controllers\allDate@work');
     Route::get('/info_wk', 'App\Http\Controllers\allDate@info_wk');
     Route::get('/slacks', 'App\Http\Controllers\SlackAppController@keys');
+    Route::post('/wkins', 'App\Http\Controllers\allDate@wk_insert');
+    Route::post('/wkupdate', 'App\Http\Controllers\allDate@wk_update');
+    Route::post('/wkdelete', 'App\Http\Controllers\allDate@wk_delete');
     Route::post('/mails', 'App\Http\Controllers\MailController@send');
 });
