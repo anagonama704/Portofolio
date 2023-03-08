@@ -1,10 +1,4 @@
-import React, {
-    useState,
-    useEffect,
-    Fragment,
-    ReactEventHandler,
-    useRef,
-} from "react";
+import React, { useState, useEffect, useRef } from "react";
 import axios from "axios";
 import {
     Card,
@@ -13,28 +7,32 @@ import {
     Box,
     MenuItem,
     IconButton,
-    Chip,
     ToggleButtonGroup,
     ToggleButton,
+    Checkbox,
 } from "@mui/material";
 import Table from "@mui/material/Table";
 import TableBody from "@mui/material/TableBody";
 import TableCell from "@mui/material/TableCell";
 import TableContainer from "@mui/material/TableContainer";
 import TableHead from "@mui/material/TableHead";
-import TableRow from "@mui/material/TableRow";
+import TableRow, {
+    TableRowClasses,
+    TableRowClassKey,
+    TableRowProps,
+    TableRowTypeMap,
+} from "@mui/material/TableRow";
 import Paper from "@mui/material/Paper";
 import SendIcon from "@mui/icons-material/Send";
 import DeleteIcon from "@mui/icons-material/Delete";
 import RotateLeftIcon from "@mui/icons-material/RotateLeft";
-import { Add } from "@mui/icons-material";
+import { Add, CheckBox, Padding } from "@mui/icons-material";
 import { ManageHistory } from "@mui/icons-material";
 import { PhotoCamera } from "@mui/icons-material";
 import Slider from "react-slick";
 import "slick-carousel/slick/slick.css";
 import "slick-carousel/slick/slick-theme.css";
 import "../../css/manage.css";
-import { maxHeight } from "@mui/system";
 
 const Main = () => {
     //型の定義
@@ -49,24 +47,36 @@ const Main = () => {
         updated_at: string;
         award: string;
         creation_time: string;
-        f_camp: string;
-        e_camp: string;
     };
     const mtSelect = [
         {
             label: "週間",
-            value: " 週間",
+            value: "週間",
         },
         {
             label: "ヶ月",
-            value: " ヶ月",
+            value: "ヶ月",
         },
         {
             label: "年",
-            value: " 年",
+            value: "年",
         },
     ];
     // useStateの定義
+    const [pp, ppp] = useState<File>();
+    const [upNum, setUpNum] = useState<Number>(0);
+    const [upName, setUpName] = useState("作品名");
+    const [upAward, setUpAward] = useState("その他");
+    const [upImg, setUpImg] = useState("default.png");
+    const [upImgName, setUpImgName] = useState("");
+    const [upWorkEx, setUpWorkEx] = useState("作品詳細");
+    const [upPeriod, setUpPeriod] = useState("0");
+    const [upPdate, setUpPdate] = useState("ヶ月");
+
+    const [nameInp, setNameInp] = useState(true);
+    const [awardInp, setAwardInp] = useState(true);
+    const [workExInp, setWorkExInp] = useState(true);
+    const [periodInp, setPeriodInp] = useState(true);
     const [inpCnt, setInpCnt] = useState(true);
     const [image, setImage] = useState("");
     const [inputName, setInputName] = useState("");
@@ -76,23 +86,23 @@ const Main = () => {
     const [inputPdate, setInputPdate] = useState("");
     const [prev, setPrev] = useState("/images/default.png");
     const [names, setNames] = useState("作品名");
-    const [awards, setAwards] = useState("受賞名など");
+    const [awards, setAwards] = useState("その他");
     const [workex, setWorkex] = useState("作品詳細");
     const [period, setPeriod] = useState("0");
-    const [pdate, setPdate] = useState(" ヶ月");
+    const [pdate, setPdate] = useState("ヶ月");
     const [active, setActive] = useState(false);
     const [toggleV, setToggleV] = useState("add");
-    const [updateP, setUpdateP] = useState(0);
-    // const [addT, setAddT] = useState("add");
-    // const [manageT, setManageT] = useState("outlined");
     const slicker = useRef<Slider>(null);
     const allForm = useRef<HTMLFormElement>(null);
     const h3cp = useRef<HTMLHeadingElement>(null);
     const imgRef = useRef<HTMLInputElement>(null);
+    const imgInpRef = useRef<HTMLInputElement>(null);
     const nameRef = useRef<HTMLInputElement>(null);
     const awardRef = useRef<HTMLInputElement>(null);
     const wkexRef = useRef<HTMLInputElement>(null);
     const monthRef = useRef<HTMLInputElement>(null);
+    const [changeImg, setChangeImg] = useState(true);
+    const tableRef = useRef<any>();
 
     //CSRF対策
     const track = document.head.querySelector(
@@ -156,20 +166,42 @@ const Main = () => {
     };
     const workImage = (e: React.ChangeEvent<HTMLInputElement>) => {
         if (!e.target.files) return;
-
         setImage(e.target.value);
         const files = e.target.files[0];
+        console.log(e.target.files);
+        console.log(files.name);
+        ppp(files);
+        console.log(pp);
 
         setPrev(window.URL.createObjectURL(files));
+    };
+    const workInpImage = (e: React.ChangeEvent<HTMLInputElement>) => {
+        if (!e.target.files) return;
+        setUpImgName(e.target.value);
+        const files = e.target.files[0];
+        console.log(e.target.files);
+        console.log(files.name);
+        ppp(files);
+        console.log(pp);
+
+        setUpImg(window.URL.createObjectURL(files));
+        setChangeImg(false);
+    };
+    const addPage = () => {
+        window.setTimeout(function () {
+            setToggleV("add");
+            setInpCnt(true);
+            if (toggleV == "managed") slicker.current?.slickGoTo(0);
+        }, 100);
     };
     const allReset = () => {
         setImage("");
         setPrev("/images/default.png");
         setNames("作品名");
-        setAwards("受賞名など");
+        setAwards("その他");
         setWorkex("作品詳細");
         setPeriod("0");
-        setPdate(" ヶ月");
+        setPdate("ヶ月");
         setInputName("");
         setInputAward("");
         setInputWorkex("");
@@ -181,26 +213,109 @@ const Main = () => {
         console.log(inputAward);
         console.log(inputWorkex);
         console.log(inputPeriod + pdate);
-        console.log(image);
-        console.log(post[updateP].updated_at);
-    };
-    const addPage = () => {
-        window.setTimeout(function () {
-            setToggleV("add");
-            setInpCnt(true);
-            if (toggleV == "managed") slicker.current?.slickNext();
-        }, 100);
+        const params = new FormData();
+
+        if (typeof pp === "undefined") return;
+        params.append("names", inputName);
+        params.append("paths", pp.name);
+        params.append("link", "#");
+        params.append("img", pp);
+        params.append("infos", inputWorkex);
+        params.append("awards", inputAward);
+        params.append("periods", inputPeriod + pdate);
+        axios
+            .post("http://localhost:8000/api/wkins", params, {
+                headers: {
+                    "content-type": "multipart/form-data",
+                },
+            })
+            .then(function (response: any) {
+                console.log(response);
+            })
+            .catch(function (error: any) {
+                console.log(error);
+            });
+        alert("追加しました");
+        allReset();
+        getData();
     };
     const managedPage = () => {
         window.setTimeout(function () {
             setToggleV("managed");
             setInpCnt(false);
-            if (toggleV == "add") slicker.current?.slickNext();
+            if (toggleV == "add") slicker.current?.slickGoTo(1);
         }, 100);
     };
     const updatePrev = (e: React.MouseEvent<HTMLTableRowElement>) => {
         console.log(e.currentTarget.id);
-        setUpdateP(Number(e.currentTarget.id));
+        setUpNum(post[Number(e.currentTarget.id)].id);
+        setUpName(post[Number(e.currentTarget.id)].name);
+        setUpAward(post[Number(e.currentTarget.id)].award);
+        setUpImg(post[Number(e.currentTarget.id)].path);
+        setUpWorkEx(post[Number(e.currentTarget.id)].infos);
+        setUpPeriod(
+            post[Number(e.currentTarget.id)].creation_time.replace(
+                /[^0-9]/g,
+                ""
+            )
+        );
+        setUpPdate(
+            post[Number(e.currentTarget.id)].creation_time.replace(
+                /[0-9０-９]/g,
+                ""
+            )
+        );
+    };
+
+    const wDelete = (e: React.MouseEvent<HTMLButtonElement>) => {
+        e.stopPropagation();
+        console.log(e.currentTarget.id);
+        console.log(post);
+        var results = confirm(
+            post[Number(e.currentTarget.id)].name + "を削除します"
+        );
+        if (results) {
+            const delKey = new URLSearchParams();
+            delKey.append("ids", "" + post[Number(e.currentTarget.id)].id);
+            axios.post("http://localhost:8000/api/wkdelete", delKey);
+            getData();
+        } else {
+        }
+    };
+    const upAllReset = () => {
+        setUpName("作品名");
+        setUpAward("その他");
+        setUpWorkEx("作品詳細");
+        setUpImg("default.png");
+        setChangeImg(true);
+        ppp(undefined);
+    };
+    const upPut = () => {
+        const params = new FormData();
+        if (typeof pp === "undefined") return;
+        params.append("nums", upNum + "");
+        params.append("names", upName);
+        params.append("paths", pp.name);
+        params.append("link", "#");
+        params.append("img", pp);
+        params.append("infos", upWorkEx);
+        params.append("awards", upAward);
+        params.append("periods", upPeriod + upPdate);
+        axios
+            .post("http://localhost:8000/api/wkupdate", params, {
+                headers: {
+                    "content-type": "multipart/form-data",
+                },
+            })
+            .then(function (response: any) {
+                console.log(response);
+            })
+            .catch(function (error: any) {
+                console.log(error);
+            });
+        alert("追加しました");
+        upAllReset();
+        getData();
     };
 
     return (
@@ -208,6 +323,7 @@ const Main = () => {
             <div className="manage_cmp">
                 <Slider
                     ref={slicker}
+                    infinite
                     slidesToShow={1}
                     className="ins_card"
                     arrows={false}
@@ -258,8 +374,8 @@ const Main = () => {
                             <TextField
                                 id="outlined-multiline"
                                 className="workname"
-                                label="受賞した賞の名前"
-                                placeholder="受賞歴があれば入力してください"
+                                label="その他"
+                                placeholder="その他情報があれば入力してください"
                                 fullWidth
                                 margin="normal"
                                 inputRef={awardRef}
@@ -286,18 +402,6 @@ const Main = () => {
                                 value={inputWorkex}
                                 onChange={workEx}
                                 onKeyPress={keypr}
-                                // onChange={(e) => {
-                                //     const counts = workex.match(/\n/g)?.length;
-                                //     console.log(counts);
-                                //     if (counts) {
-                                //         if (counts <= 4) {
-                                //         } else {
-                                //             e.preventDefault();
-                                //         }
-                                //     } else {
-                                //     }
-                                //     setWorkex(e.target.value);
-                                // }}
                             />
                             <div className="month_master">
                                 <TextField
@@ -323,7 +427,7 @@ const Main = () => {
                                     select
                                     label=" "
                                     margin="normal"
-                                    defaultValue=" ヶ月"
+                                    value={pdate}
                                     variant="standard"
                                     onChange={(e) => {
                                         setPdate(e.target.value);
@@ -341,11 +445,11 @@ const Main = () => {
                             </div>
                         </Box>
                     </Card>
-                    <Card className="cards">
+                    <Card className="up_cards">
                         <h2>作品管理</h2>
                         <TableContainer
                             component={Paper}
-                            style={{ minHeight: "500px", maxHeight: "500px" }}
+                            style={{ minHeight: "525px", maxHeight: "525px" }}
                         >
                             <Table stickyHeader>
                                 <TableHead>
@@ -353,6 +457,7 @@ const Main = () => {
                                         <TableCell>ID</TableCell>
                                         <TableCell>作品名</TableCell>
                                         <TableCell>更新日時</TableCell>
+                                        <TableCell></TableCell>
                                     </TableRow>
                                 </TableHead>
                                 <TableBody>
@@ -360,18 +465,30 @@ const Main = () => {
                                         return (
                                             <TableRow
                                                 key={index}
-                                                id={"" + postt.id}
+                                                ref={tableRef}
+                                                id={"" + index}
                                                 hover
-                                                onClick={updatePrev}
+                                                onClick={(e) => {
+                                                    updatePrev(e);
+                                                }}
                                             >
-                                                <TableCell>
+                                                <TableCell width={"10px"}>
                                                     {postt.id}
                                                 </TableCell>
-                                                <TableCell>
+                                                <TableCell width={"100px"}>
                                                     {postt.name}
                                                 </TableCell>
                                                 <TableCell>
                                                     {postt.updated_at}
+                                                </TableCell>
+                                                <TableCell width={"10px"}>
+                                                    <Button
+                                                        onClick={wDelete}
+                                                        id={"" + index}
+                                                        fullWidth
+                                                    >
+                                                        <DeleteIcon fontSize="small" />
+                                                    </Button>
                                                 </TableCell>
                                             </TableRow>
                                         );
@@ -381,16 +498,22 @@ const Main = () => {
                         </TableContainer>
                     </Card>
                 </Slider>
+
                 <div className="prev_master">
                     <div className="prev_card">
-                        <ToggleButtonGroup exclusive value={toggleV}>
+                        <ToggleButtonGroup
+                            exclusive
+                            value={toggleV}
+                            style={{
+                                width: "fit-content",
+                                margin: "0 0 0 10.3%",
+                            }}
+                        >
                             <ToggleButton
                                 value="add"
                                 onClick={addPage}
                                 sx={{
-                                    backgroundColor: inpCnt
-                                        ? "#2196f3"
-                                        : "#fff",
+                                    backgroundColor: "#fff",
                                 }}
                             >
                                 <div
@@ -407,9 +530,7 @@ const Main = () => {
                                 value="managed"
                                 onClick={managedPage}
                                 sx={{
-                                    backgroundColor: inpCnt
-                                        ? "#fff"
-                                        : "#2196f3",
+                                    backgroundColor: "#fff",
                                 }}
                             >
                                 <div
@@ -423,11 +544,15 @@ const Main = () => {
                                 </div>
                             </ToggleButton>
                         </ToggleButtonGroup>
+
                         <Card
                             id="a"
                             className="prev_cmp"
                             component="div"
-                            style={{ textDecoration: "none" }}
+                            style={{
+                                textDecoration: "none",
+                                display: inpCnt ? "flex" : "none",
+                            }}
                         >
                             <Card id="prev_img">
                                 <div
@@ -444,6 +569,7 @@ const Main = () => {
                                 <h3
                                     onClick={(e) => {
                                         nameRef.current?.focus();
+                                        setToggleV("add");
                                     }}
                                 >
                                     {names}
@@ -451,6 +577,7 @@ const Main = () => {
                                 <p
                                     onClick={(e) => {
                                         awardRef.current?.focus();
+                                        setToggleV("add");
                                     }}
                                 >
                                     {awards}
@@ -462,6 +589,7 @@ const Main = () => {
                                     }}
                                     onClick={(e) => {
                                         wkexRef.current?.focus();
+                                        setToggleV("add");
                                     }}
                                 >
                                     {workex}
@@ -473,6 +601,7 @@ const Main = () => {
                                     }}
                                     onClick={(e) => {
                                         monthRef.current?.focus();
+                                        setToggleV("add");
                                     }}
                                 >
                                     <p>制作期間：</p>
@@ -483,6 +612,188 @@ const Main = () => {
                                 </div>
                             </div>
                         </Card>
+                        <Card
+                            id="a"
+                            className="prev_cmp"
+                            component="div"
+                            style={{
+                                textDecoration: "none",
+                                display: inpCnt ? "none" : "flex",
+                            }}
+                        >
+                            <Card id="prev_img">
+                                <div
+                                    style={{
+                                        backgroundImage: `url(/storage/image/${upImg})`,
+                                        display: changeImg ? "block" : "none",
+                                    }}
+                                    className="prev_imgs"
+                                    onClick={(e) => {
+                                        imgInpRef.current?.click();
+                                    }}
+                                >
+                                    <input
+                                        ref={imgInpRef}
+                                        hidden
+                                        accept="image/*"
+                                        type="file"
+                                        onChange={workInpImage}
+                                    />
+                                </div>
+                                <div
+                                    style={{
+                                        backgroundImage: `url(${upImg})`,
+                                        display: changeImg ? "none" : "block",
+                                    }}
+                                    className="prev_imgs"
+                                    onClick={(e) => {
+                                        imgInpRef.current?.click();
+                                    }}
+                                ></div>
+                            </Card>
+                            <div className="prev_p" ref={h3cp}>
+                                <h3
+                                    onClick={(e) => {
+                                        setToggleV("add");
+                                        setNameInp(false);
+                                    }}
+                                    style={{
+                                        display: nameInp ? "block" : "none",
+                                    }}
+                                >
+                                    {upName}
+                                </h3>
+                                <input
+                                    type="text"
+                                    style={{
+                                        fontSize: "18.7px",
+                                        display: nameInp ? "none" : "block",
+                                        fontWeight: "bold",
+                                    }}
+                                    value={upName}
+                                    onBlur={(e) => {
+                                        setNameInp(true);
+                                    }}
+                                    onChange={(e) => {
+                                        setUpName(e.target.value);
+                                    }}
+                                />
+                                <p
+                                    onClick={(e) => {
+                                        setToggleV("add");
+                                        setAwardInp(false);
+                                    }}
+                                    style={{
+                                        display: awardInp ? "block" : "none",
+                                    }}
+                                >
+                                    {upAward}
+                                </p>
+                                <input
+                                    type="text"
+                                    style={{
+                                        display: awardInp ? "none" : "block",
+                                        width: "300px",
+                                        fontSize: "16px",
+                                    }}
+                                    value={upAward}
+                                    onChange={(e) => {
+                                        setUpAward(e.target.value);
+                                    }}
+                                    onBlur={(e) => {
+                                        setAwardInp(true);
+                                    }}
+                                />
+                                <p
+                                    style={{
+                                        whiteSpace: "break-spaces",
+                                        overflowWrap: "break-word",
+                                        display: workExInp ? "block" : "none",
+                                    }}
+                                    onClick={(e) => {
+                                        setToggleV("add");
+                                        setWorkExInp(false);
+                                    }}
+                                >
+                                    {upWorkEx}
+                                </p>
+                                <textarea
+                                    wrap="hard"
+                                    style={{
+                                        display: workExInp ? "none" : "block",
+                                        width: "300px",
+                                        fontSize: "16px",
+                                        height: "100px",
+                                    }}
+                                    onChange={(e) => {
+                                        setUpWorkEx(e.target.value);
+                                    }}
+                                    onBlur={(e) => {
+                                        setWorkExInp(true);
+                                    }}
+                                    value={upWorkEx}
+                                />
+                                <div
+                                    style={{
+                                        display: "flex",
+                                        padding: "10px 0 0 0",
+                                    }}
+                                    onClick={(e) => {
+                                        setToggleV("add");
+                                    }}
+                                >
+                                    <p>制作期間：</p>
+                                    <p
+                                        className="spaces"
+                                        style={{
+                                            display: periodInp
+                                                ? "block"
+                                                : "none",
+                                        }}
+                                        onClick={(e) => {
+                                            setPeriodInp(false);
+                                        }}
+                                    >
+                                        {upPeriod}
+                                        {upPdate}
+                                    </p>
+                                    <div
+                                        className="spaces"
+                                        style={{
+                                            display: periodInp
+                                                ? "none"
+                                                : "block",
+                                        }}
+                                    >
+                                        <input
+                                            type="number"
+                                            value={upPeriod}
+                                            style={{
+                                                width: "50px",
+                                                height: "20px",
+                                            }}
+                                            onChange={(e) => {
+                                                setUpPeriod(e.target.value);
+                                            }}
+                                            onBlur={(e) => setPeriodInp(true)}
+                                        />
+                                        <select
+                                            style={{ height: "20px" }}
+                                            value={upPdate}
+                                            onChange={(e) =>
+                                                setUpPdate(e.target.value)
+                                            }
+                                            onBlur={(e) => setPeriodInp(true)}
+                                        >
+                                            <option value="週間">週間</option>
+                                            <option value="ヶ月">ヶ月</option>
+                                            <option value="年">年</option>
+                                        </select>
+                                    </div>
+                                </div>
+                            </div>
+                        </Card>
+
                         <div className="btns">
                             <Button
                                 className="ins_btn"
@@ -491,8 +802,22 @@ const Main = () => {
                                 sx={{
                                     backgroundColor: "#fff",
                                     fontSize: "18px",
+                                    display: inpCnt ? "flex" : "none",
                                 }}
                                 onClick={allReset}
+                            >
+                                リセット
+                            </Button>
+                            <Button
+                                className="ins_btn"
+                                variant="outlined"
+                                endIcon={<RotateLeftIcon />}
+                                sx={{
+                                    backgroundColor: "#fff",
+                                    fontSize: "18px",
+                                    display: inpCnt ? "none" : "flex",
+                                }}
+                                onClick={upAllReset}
                             >
                                 リセット
                             </Button>
@@ -503,102 +828,27 @@ const Main = () => {
                                 onClick={newPut}
                                 sx={{
                                     fontSize: "18px",
+                                    display: inpCnt ? "flex" : "none",
                                 }}
                             >
                                 追加
                             </Button>
-
-                            {/* <Button
-                                className="deletes"
-                                variant="outlined"
-                                startIcon={<DeleteIcon />}
+                            <Button
+                                className="ins_btn"
+                                variant="contained"
+                                endIcon={<SendIcon />}
+                                onClick={upPut}
+                                sx={{
+                                    fontSize: "18px",
+                                    display: inpCnt ? "none" : "flex",
+                                }}
                             >
-                                削除
-                            </Button>
-                            <Button variant="contained" endIcon={<SendIcon />}>
                                 更新
-                            </Button> */}
+                            </Button>
                         </div>
                     </div>
-                    {/* {post.map((post, index) => {
-                        return (
-                            <div className="prev_card" key={index}>
-                                <Card
-                                    id={"" + post.id}
-                                    className="prev_cmp"
-                                    component="div"
-                                    style={{ textDecoration: "none" }}
-                                >
-                                    <Card id="prev_img">
-                                        <div
-                                            style={{
-                                                backgroundImage: `url(/images/${post.path})`,
-                                            }}
-                                            className="prev_imgs"
-                                        ></div>
-                                    </Card>
-                                    <div className="prev_p" ref={h3cp}>
-                                        <h3
-                                            onDoubleClick={doubles}
-                                            className={
-                                                active ? "noview" : "onview"
-                                            }
-                                        >
-                                            {post.name}
-                                        </h3>
-                                        <input
-                                            type="text"
-                                            defaultValue={post.name}
-                                            className={
-                                                active ? "onview" : "noview"
-                                            }
-                                        />
-                                        <p>{post.award}</p>
-                                        <p>{post.infos}</p>
-                                        <div
-                                            style={{
-                                                display: "flex",
-                                                padding: "10px 0 0 0",
-                                            }}
-                                        >
-                                            <p>制作期間：</p>
-                                            <p>{post.creation_time}</p>
-                                        </div>
-                                    </div>
-                                </Card>
-                                <div className="btns">
-                                    <Button
-                                        className="deletes"
-                                        variant="outlined"
-                                        startIcon={<DeleteIcon />}
-                                    >
-                                        削除
-                                    </Button>
-                                    <Button
-                                        variant="contained"
-                                        endIcon={<SendIcon />}
-                                    >
-                                        更新
-                                    </Button>
-                                </div>
-                            </div>
-                        );
-                    })} */}
                 </div>
             </div>
-
-            {/* <div className="inp">
-                <form action="create" method="post">
-                    <input type="hidden" name="_token" value={track.content} />
-                    <input type="text" name="names" />
-                    <input type="submit" value="追加" />
-                </form>
-                <form action="delete" method="post">
-                    <input type="hidden" name="_token" value={track.content} />
-                    <input type="text" name="ids" />
-                    <input type="submit" value="削除" />
-                </form>
-            </div> */}
         </div>
     );
 };
