@@ -31,11 +31,6 @@
     flex-wrap: wrap;
     justify-content: space-around;
 }
-#card_cp {
-    width: 500px;
-    height: 300px;
-    margin: 0 0 50px 0;
-}
 #card_cp a img {
     display: block;
     width: 80%;
@@ -49,6 +44,16 @@
     height: 85%;
     margin: 5% auto;
     background-size: cover;
+    border: 1px #eee solid;
+}
+#card_cp {
+    width: 500px;
+    height: 300px;
+    margin: 0 0 50px 0;
+    transform: rotate(0);
+}
+#card_cp:hover {
+    transform: rotate(0);
 }
 h2 {
     margin: 2px;
