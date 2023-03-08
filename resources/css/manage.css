@@ -14,9 +14,13 @@
     width: 30%;
     height: auto;
     padding: 0 0;
+    -webkit-user-drag: none;
 }
 .cards {
     padding: 25px 0;
+}
+.up_cards {
+    padding: 25px 0 0 0;
 }
 h2 {
     width: auto;
@@ -33,12 +37,13 @@ h2 {
 .prev_cmp {
     width: 85%;
     height: auto;
-    padding: 80px 20px;
     margin: 0 0 0 auto;
+    padding: 80px 20px;
     display: flex;
     justify-content: space-around;
     align-items: center;
 }
+
 #prev_img {
     width: 400px;
     height: 220px;
@@ -91,6 +96,9 @@ h2 {
 }
 .textbox {
     word-break: break-all;
+}
+.spaces {
+    height: auto;
 }
 .spaces::after {
     content: "";
