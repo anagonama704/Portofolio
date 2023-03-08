@@ -69,7 +69,7 @@ const Works = () => {
                                 <Card id="img_cmp">
                                     <div
                                         style={{
-                                            backgroundImage: `url(/images/workImages/${postt.path})`,
+                                            backgroundImage: `url('/storage/image/${postt.path}')`,
                                         }}
                                         className="work_img"
                                     ></div>
